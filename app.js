@@ -15,13 +15,15 @@ app.get('/', function(req, res){
     res.render('index');
 });
 
-app.get('/profile', isLoggedIn, function(req, res){
-    console.log(req.user);
-
-})
-
 app.get('/login', function(req, res){
     res.render('login');
+});
+
+
+app.get('/profile', isLoggedIn, async function(req, res){
+    let user = await userModel.findOne({email: req.user.email})
+    console.log(user);
+    res.render('profile', {user} );
 });
 
 app.post('/register', async function(req, res){
@@ -55,7 +57,7 @@ app.post('/login', async function(req, res){
         if(result) {
             let token = jwt.sign({ email: email, userid: user._id }, 'shhhhh');
             res.cookie("token", token);
-            res.status(200).send("You can login");
+            res.status(200).redirect("/profile");
         }
         else res.redirect('/login');
     })
@@ -67,12 +69,14 @@ app.get('/logout', function(req, res){
 });
 
 function isLoggedIn(req, res, next){
-    if(req.cookies.token === "") res.send("You must be logged in");
+    if(req.cookies.token === "") res.redirect('/login');
     else{
         let data = jwt.verify(req.cookies.token, "shhhhh");
         req.user = data;
         next();
     }
-}
+};
+
+
 
 app.listen(3000);
