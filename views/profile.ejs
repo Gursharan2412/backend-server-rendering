@@ -24,8 +24,9 @@
                     <div class="post w-1/3 p-5 rounded-md mb-3 border-2 border-zinc-700 bg-zinc-800">
                         <h4 class="text-blue-500 mb-2">@<%= user.username %></h4>
                         <p class="text-sm tracking-tight"><%= post.content %></p>
-                        <div class="brns flex gap-4 mt-5">
-                            <a class="text-blue-500" href="">Like</a>
+                        <small class="mt-2 inline-block"><%= post.likes.length %>4 likes</small>
+                        <div class="brns flex gap-4 mt-1">
+                            <a class="text-blue-500" href="/like/<%= post._id %>">Like</a>
                             <a class="text-zinc-500" href="">Edit</a>
                         </div>
                     </div>
