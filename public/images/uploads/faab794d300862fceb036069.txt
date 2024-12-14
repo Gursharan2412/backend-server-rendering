@@ -1,0 +1,359 @@
+Date: 29/July/2024
+                                          "Get Started with Asynchronous JavaScript"
+
+-Synchronous and Asynchronous Javascript
+//Sync Javascript: Sync matlab ek ke baad dusra hoga, jab tk ek command complete na ho tb tk dusra command run nhi hoga. It is kind of structured command running. First will run and execute then second will run and execute then third will run and execute and so on... Here the code executes line by line.
+
+//Async Javascript: It means sare tasks shuru krdo aur jiska answer pehle aajaye usko execute krdo. Kehne ka mtlb structured kuch nhi hoga jo pehle execute hua out of all running commands uska output aa ajayega...
+
+For example: We are having 4 tasks with their time period 
+       - Task A = Taking 5 seconds to finish
+       - Task B = Taking 3 seconds to finish
+       - Task C = Taking 15 seconds to finish
+       - Task D = Taking 1 second to finish
+-So here if we use Sync Javascript for above tasks the time taken to execute all the tasks will be 24 seconds because each task starting with task A will execute seperately taking their own desired time and till then the another should have to wait for their turn.
+-And if we use Async Javascript here then all above tasks will start at same time and the task which executed first according to their time period it will get shown as output and in this way all the tasks will take only 15 seconds to execute themselves because Task C takes 15 seconds and till then rest of the tasks will be executed according to their time period.
+-So this is the difference between Sync and Async Javascript.
+
+Now there is a question, Kaise pta chlta ha ki hum sync code likh rhe ha ya async ?
+-Answer:  If we are using below given terms then it is damn sure that we are writing Async code, and if we are not using the given below terms then it is clear that we are using sync javascript code.
+           ( setTimeout, setInterval, promises, async, await, fetch, axios, XMLHttpRequest )  		
+
+
+//setTimeout: We know if we are using setTimeout() it means we are writing async js code. So lets see demo of setTimeout()
+   setTimeout(callback, timeinms) - so in this timeout function we are having two parameters, first one is callback function and second one is time in milliseconds.
+Why we are using that function as "callback function" ? As because that funciton is called after a particular time period which we are providing as second parameter that is why it is called as callback function.
+-Example:  console.log("Hello World");
+           setTimeout(function(){}, 2000)
+           console.log("Hello World 2");      //In this code firstly Hello World will print and then immediately Hello World 2 will be printed
+
+           console.log("Hello World");
+           setTimeout(function(){console.log("Hello World 2"); }, 2000)   //Now in this code, firstly Hello World will print and then we are having our async code which uses setTimeout and                                                                             due to that Hello World 2 will be printed after 2 seconds. So in this way "setTimeout()" is used.
+  -Callback function hamesha async code ke andar answer aane pr hi chlta ha.
+
+Very Very Important:
+"Javascript Asynchronous nhi ha"   Let us see how...
+//Async ka matlab ha do kaam ek sath hona but Javascript do kaam ek sath nhi karta ha as because it is a single threading language which means it can compute one task/command at one time. It is not a multithreading language.
+-Main Stack/Side Stack (The concept on which Javascript is working using sync and async code)
+//Jo bhi main stack par hota ha vo output deta ha and jo bhi side stack par hota ha vo behind the scenes processing kar skta ha aur jab uski processing complete ho jaaye fir usko main stack par laaya jata ha fir uska output show hota ha.
+--For Example:  Command A (Sync Code)
+                Command B (Sync Code)
+                Command C (Async Code)
+                Command D (Sync Code)  //So now what happened is, Javascript ke andar do stack hote ha, Main Stack and Side Stack, Main stack is designed and used for Synchronous code everytime, mtlb ki hamesha sync code main stack me hi run and execute hoga- it is global rule. Ab side stack is used for async code, matlab ki jo bhi async code hoga usko side stack me bhej diya jata ha for its processing. Jab tk main stack ke andar ke sare commands completely run and execute nhi ho jaate vo bhi one by one because javascript can only compute one command at a time aur jb tk main stack empty/khali nhi ho jati tb tk side stack ke andar ke async code ko nhi cheda jata. Main stack empty hone ke baad side stack ke code ko pucha jata ha ki tumhari processing done hogyi ha ? If yes then it will be taken into main stack and get executed in the form of output otherwise main stack wait for its processing and then ask again. So this is the complete ground level working of Javascript with the help of Main Stack and Side Stack.
+
+-Event Loop: It is very important for interview perspective as it is asked in almost all interviews.
+  Event loop is nothing but just a loop or functionality which is used by Main stack and Side Stack for their communication. Jb Main stack empty/khali ho jata ha tb vo Side stack ke andar pade command ko puchta ha ki tumhari processing hogyi ya nhi, so ye processing puchne vale concept ko event loop bola jata ha ya fir we can say that event loop is used for asking Side stack's command that have you processed or not ? And if it is processed then it is taken and put into Main stack and then executed otherwise if the processing is still left then it waits for completion of processing and then again asked to it. SO all this functionality is done by "Event Loop".
+
+//So in this way Javascript is not asynchronous or multithreading programming language. It is a single thread synchronous programming language.
+
+
+--Now, let us talk about further study related to above studied content. I mean, we know that how sync and async code works, runs and executes in javascript. 
+//For async code, we are having two conditions: 
+1. Firstly we need to send request to some third party for accessing data and for that we are using these below mentioned terms in async javascript code:  ( fetch, axios, setTimeout, setInterval, promises ) All these are used to access some data from some third party or we can say, we are requesting to get data from some third party. So for request purpose we use these.
+2. Secondly, when requested data is accessed and now we need to execute it as an output then we use below mentioned terms: ( then catch, callbacks, async await ) All these are used to execute our accessed data in the form of request from third party.
+
+
+--Promises (Very Important): As we know, we use promises when we send request to access data and also we use promises while writing async code. So promises are having two things which we need to keep in mind:
+1. Resolve {RES}
+2. Reject {REJ}    // Further we are storing our RES/REJ in a variable named as "var" and we are using 'then' and 'catch' here. If the promise which we are using is succesfully resolved or we can say provide {RES} then the "var" contains 'then' whereas if the promise which we are using is rejected anyhow or we can say it provides {REJ} then the "var" contains 'catch'.
+
+In Promise, we know it is used for async code and in async code lines/tasks/commands they executed according to their time period it means third task can be executed before first in async. So to make execution in an ordered way we can use Promises and do this very easily. To do so, we can write our First Promise P1 and when it gets resolved, after that we can write our Second Promise P2 in 'then' of first promise. Similarly we can write Third Promise P3 in 'then' of second promise and so on.... By doing this, the async code will execute each promise in an ordered way.
+
+--Async Await (Very Important): Koi bhi aisa function jisme aap async code likhenge, kyoki async code ha to aap uske andar promises ka istemaal kr skte ha, jab uska answer aayega tb humein uske andar .then use krna padega, to us .then ko lagane se bachne ke liye we can use "Async Await".
+
+For Example: async function abcd() {
+                 let raw = await fetch(`https://www.facebook.com`);
+                 let ans = await raw.json();
+                 console.log(ans);
+              }
+
+
+//Interview Level stuff: 
+1. Concurrency: Javascript ke andar sync code and async code ek sath process ho rha hota ha usko concurrency bolte ha. It means we are having main stack and side stack, both are processing at each other level so dono me processing chl rhi ha aur main stack sb kuch execute bhi kr rha ha, so that is known as 'concurrency'.
+2. Parallelism: Focus jada krta ha different processors aur unke cores par kaam ko chlane par. (Will learn more about it later)
+3. Throttling: Kisi code ke andar number of executions ko ya we can say no of scrolling ko control krna is known as 'Throttling'.          
+4. Undefined & not-defined : Undefined means existence to ha but exact value nhi pata ha. And on the other hand, existence hi nhi ha, koi chij exist hi nhi krti that is known as not-defined.
+
+
+
+
+
+
+
+Date: 01/August/2024                                                            Get Started with Basic Fundamentals Of Javascript
+ 
+
+//Word & Keyword in JS
+  -Word = Jiska koi mtlb na ho ya koi use na ho JS me, For Ex: chacha, bhaiya, ans, para etc
+  -Keyword = Jiska kuch meaning hota ha JS me, For ex: For, Do, If, Else, While etc these all are used for loops
+ 
+//Variables(Var), Constants(Const) and Let in Js
+  -Variables are something whose value can be changed at any instance of code accordingly as its name suggests that it contains variations in it.
+  -Constants are something whose value can not be changed and if we try to assign new value in const then we will get an error. 								
+//Hoisting in JS
+   -Hoisting: variables and functions are hoisted in JS which means there declaration is moved on the top of the code.
+For Example: console.log(a); 
+             var a = 12;
+           This line is breaked into this: var a;
+                                           a = 12;  //and out of these two, var a line get on the top and if we write console line before var a =12 then we get an undefined value of 'a'.
+This can only be done in JS that we can write declaration statement first and initialisation statement afterwards and in this case we will be getting an undefined value of particular variable.
+
+
+//Primitives & Refrences in JS
+ -Primitives = number, null, string, boolean, undefined 
+ -Refrences = [], {}, ()  //Everything which contains any type of bracket is known as refrence type value. 
+    For Ex: var a = [1,2,3,4]
+            var b = a;
+            b.pop();  //So here what happened is, b contains an array which is owned by 'a' and we are using pop with 'b' so it will also reflects its actions in 'a' as well because it is a refrence type value.   
+
+//Loops  - for & while
+  Loop ka matlab ha repeat hona. For Ex: 1 1 1 1 1 1 etc
+  -for(start; end; change) {
+            console.log(i); }  // for(var i = 0; i<11; i++){
+                                               console.log; }
+  -while(any condition which is true or false){some code for execution}
+
+//Functions  -Functions mainly teen kaam ke liye hote ha
+  1. Jab apka code aap turant nhi chlana chahte ho, future me chlana chahte ho.
+  2. Jab apka code aap reuse krna chahte ho.
+  3. Jab aap code chlana chahte ho har baar with different data.
+
+-- function abcd(){
+console.log("Hello World");
+}
+abcd();
+
+--  function abcd(a, b, c){
+  console.log(a, b, c);
+}
+abcd(12, 13, 14);     //Here in this function abcd(), we are having arguments and parameters.
+                       Arguments = real value which we provide while calling the function in downside.
+                       Parameters = variable jinme arguments value store hoti ha in upper function.
+
+//Arrays   --Group of values is known as Arrays. We can not store more than one value in a variable. If we want to store more than one value/multiple values then we use Arrays
+  For example: var a = 12;   //Simple variable storing single value
+               var a = [12, 13, 19, 20];   //Array 'a' storing 4 different values.
+In Arrays, indexing/counting starts from 0th point for ex: a[0] = 12, a[1] = 13 etc
+Basics of Arrays: Push, Pop, Shift, Unshift, Splice
+--arr a = [1,2,3,4,5,6,7];
+--arr.push(8);  //What happens here is, pop function adds additional value from back side to our existing array, here 8 is added as an additional value in our array. So this is the functionality of push function to add new value into the array.
+
+--arr a = [1,2,3,4,5,6,7];
+--arr.pop();   //What happens here is, pop function delete one value from back side of the array and 7 in the array is deleted if we are using pop function on above array. So to delete any value in the array we use pop function.
+
+--arr a = [1,2,3,4,5,6,7];
+--arr.unshift(0);  //What happens here is, unshift function adds value from front side to our array, here 0 is added from front side into our array.
+
+--arr a = [1,2,3,4,5,6,7];
+--arr.shift();   //What happens here is, shift function is used to delete or remove value from front side of the array, here 1 is removed from the array.
+
+--arr a = [1,2,3,4,5,6,7];
+arr.splice(2,1);   //Here splice function is used to remove/delete values from center of the array or from where ever part of array you want but we need to give the range till where we want  to remove the values. So 2 means index of 2 and 1 means only one value of index 2. If we put (2,3) it means value of index 2 and till three values from value of index 2.
+
+
+
+Date: 10/August/2024                                   Get Started With Advanced Topics Of Javascript
+
+
+Javascript is divided into two main  versions: ES5 & ES6, ES5 is older version and ES6 is newer version.
+//Difference between var let & const
+>>First Difference:
+--var old Javascript mein tha ya keh skte ha ki old Javascript ka part ha i.e ES5.
+--let and const newer Javascript mein ha i.e ES6.
+
+>>Second Difference:
+--var function scoped hota ha.
+Let us see with an example:  function abcd(){
+                                    for(var i=1; i<=12; i++){
+                                            console.log(i);}  
+                                         console.log(i);  }  //Here in this function we are having var and we know var is function scoped so in Javascript "var apne parent function me kahi bhi use ho skta ha" and we can use console.log(i) out side for loop and it will provide us an output with value 12. But this cannot be done in any other language except Javascript.
+
+--let and const braces scoped hota ha.
+Now to overcome the above problem of var we use 'let'. We know let is curly braces scoped so it will only execute the code inside curly braces and will not execute same 'i' outside curly braces. For Example:  function abcd(){
+                        for (let i = 1; i<12; i++){console.log(i);}
+                                console.log(i);}   //Here we will be having output from 1 to 11 and after that it will provide us an error that 'i' is not defined because it is outside curly braces.
+--So this is the second difference between var and let.
+
+>>Third Difference: This difference contains many sub parts of Javascript.
+--var adds itself to the window object. var is a part of older JS so it adds the data and value into the window object which let someone to steal the information. So to overcome this problem newer JS adds up let & const which do not add their data and value to the window object.
+--let & const does not adds itself to the window object.
+
+--Windows Object: This term is used in third difference of var, let & const. So it holds very big amount of information related to JS.
+Javascript ke andar bht sare features ha jo hum use krte ha, but bht sare features aise bhi ha jo hum Javascript ke sath use krte ha but vo actual me Javascript ke features nhi ha but fir bhi hum un features ko use kr paate ha kyuki vo sabhi features Javascript use krleti ha with the help of window object, aur window object is nothing but a box of features which is given or introduced by browser to use with Jvascript. For example: alert, prompt, setTimeout, setInterval etc. We can see all the features of window object on developer console by writing 'window'.
+
+//Browser Context API (Very Important):
+Now we are gettting started with Browser Context API, it contains three major things in itself-
+----Window Object: Used and discussed already above, it provides external features to Javascript using browser and it is a part of Browser Context API.
+
+----Stack: As name suggests, it is a stack in which orderwise programs come and get executed according to thier number. In contrast we can say, we are having a, b, c, d, e. We need to execute all this in the same manner as they are written, so a will solved & executed first, then b gets solved and executed second and so on. So the place where solution of everything takes place is known as stack.
+
+----Heap Memory: It is used to store intermediate data values, and a place or space where we store all the intermediate variable data is known as heap memory. For example: We need to solve this: 1+2+3+4+5+6 and print final value, now computer done it step by step after first two values it add another one after getting solution of first. 1+2 = 3 then it store this 3 at somewhere then it adds 3+3 = 6 then it stores this 6 somewhere then adds 6+4 = 10, so in this way these intermediate values are stored in heap memory.
+--So these three combined form a Browser Context API where we are having window object, stack and heap memory.  
+
+//Execution Context(Very Important):
+Now we are having Execution Context which is a very crucial topic, it is basically related with functions in Javascript.
+--Jab bhi hum function bnaaakr usko chlate ha ya run krte ha tb uss time function khud ka ek imaginary container bna leta ha jisme mainly three things hoti ha:
+1. Variables
+2. Functions inside that major/parent function
+3. Lexical Environment of that major function
+Iss hi imaginary container of that function ko hum Execution Context bolte ha thats it.
+Now let us understand with example: We are having function abcd(), aaj ke baad dimag me ye baat hmesha yaad rkhni ha ki jaise hi koi function bnao ya koi function run hoga to vaha Execution Context bn jayega dimag me, mtlb ki ek imaginary box jiske andar uss function ke variables, uske andar ke child functions, aur uss function ka lexical environment hoga.
+function abcd(){
+      var a = 12;
+      function def(){
+            var b = 12;}
+}          //So here in this function if we talk about execution context of this function, we are having an imaginary container of function abcd(), where we are having variable 'a', function def() which is inside function abcd(), and the lexical environment of the function abcd(). Now we cannot use variable 'b' in abcd() because it is not the part of that function instead it is the part of def() function and we know that variables are hvaing scope till nearest parent function only. So this thing we get to know with the help of Lexical Environment that what parameters can be accessed by the function and what are not. Important thing is, Execution Context is created everytime whenever function is called.
+
+//Lexical Environment: Basically, Lexical Environment ek chart hota ha jisme ye likha hota ha ki hamara particular function kin kin chijoo ko access kr skta ha and kin kin ko nhi kr skta ha, matlab ki it holds it's scope and scope chain.
+
+//How to copy reference values: This thing we discuss in our basic fundamentals when we were studying primitives and reference values. So there are having: 
+    var a = [1,2,3,4,5];
+    var b = a;
+    b.pop(); //So in this case b contains values of array 'a' and remove 5 from it but it reflects same thing in 'a' as well. So to overcome this issue and to only change the values in 'b' and 'a' remains the same, then we use spread operator to copy the values.
+----Spread operator: (...a)
+       var a = [1,2,3,4,5];
+       var b = (...a);   //Spread operator, what happens here is the values of array a copied into b and now the pop() function will only remove 5 from b and a remains same.
+       b.pop();
+--So this is how we can copy the reference type values and put parent arrays remain same without any changes. We can also use the same spread operator to copy the object values.
+For example: var obj1 = { name: "Guri"
+                         age: 23
+                         city: "New Delhi"};
+             var obj2 = {...obj1};
+
+
+//Truthy and Falsy conditionals:
+--Javascript me kuch bhi likho wo basically do parkaar me se kisi ek parkaar ko belong krti ha aur vo do parkaar ha : truthy and falsy, aur agar ma falsy values ko yaad krlu to ma easily javascript ke andar bta skta hu ki truthy kya ha aur falsy kya ha.
+--Falsy values: 0, false, undefined, null, Nan{not a number}, document.all  //Ye sabhi values falsy values ha, agar kahi pr bhi loops me ya functions me ya arrays/objects me ya puri JS me ye values ho to mtlb vo particular chij falsy ha aur iske alava kuch bhi values ho to vo truthy hota ha fir chahe vo 'if(-1)' hi kyu na ho pr vo truthy bola jayega.
+
+
+//ForEach, ForIn, do-while:
+--forEach: Ye loop sirf aur sirf arrays ke liye use kia jaata ha, mtlb ki arrays ke andar kisi bhi tarah ka loop run krna ho to vaha pr forEach loop use kia jata ha, yehi iski khasiyat ha that it is only used for arrays. For Example: var a = [1,2,23,45,36,47,67,60,79];
+                                         a.forEach(function(val){
+                                                     console.log(val+2); }) //So here we are using forEach loop in our array 'a', we are making a function with parameter named as val which contains each value of our array and print the value after adding 2 into it as we write 'val+2' in our print statement. So in this way we use forEach loop with arrays.
+--Important note: forEach loop kabhi bhi by default hamare array me koi bhi changes nhi krta ha , vo changes krta ha sirf array ki temporary copy values pr jiski vajah se array hmesha same rehta ha.
+
+
+--forIn: Ye loop sirf aur sirf objects ke liye use hota ha, mtlb ki objects ke andar ko=isi bhi tarah ka loop krne ke liye forIn loop use kia jata ha.
+For Example: var obj = { name: "Guri",
+                         age: 23,
+                         city: "New Delhi"}
+             for(var key in obj){
+                    console.log(key); }   //Now we need to understand some main points related to forIn loop, firstly it is used to loop in objects. here we are having an object and we use forIn loop in that object named as 'obj'. So the syntax of forIn loop says that after writing for we need to declare a variable which we usually use as 'key' and write 'in' then write object name which is 'obj' in above case then we write next program code. And if we run above console statement it will only print name, age and city but not the values of those parameters. So to get the values we can wirte this: for(var key in obj){ console.log(key, obj[key]); } //here we will be having values of key first and then values of objects related to key. As because we write obj[key], it will convert the key into obj and provide the actual values presented in our object.
+
+--do-while: this loop is not so important but we can learn for just knowing purpose. The syntax of do-while loop is as follows:
+   var a = 12;
+   do{
+     console.log("Hello!");
+     a++;  }
+   while(a<15)   //So this is the syntax for do-while loop, the concept of do-while loop is that 'do' will always print first for one time no matter 'while' condition is true or false. Then 'while' condition must be check in and then further responses will be printed/executed. So basically we use do-while loop when we want to print at least one statement before loop starting, there is used most of the time.[Iski jada jrurat nhi padti normally]
+
+//Callback Function: This function is part of Asynchronous Javascript but it is advanced topic of javascript so we need to understand it very precisely because it is used vey widely in javascript applications.
+--Aisa code ya aisa program jo baad me chlta ha ya thoda time leta ha complete hokr execute hone ke liye uss progrma/code ko hum ek function de dete ha ki bhai jb complete ho jaao to ye function chla dena, aur jo function hum dete ha vo ek normal function hi hota ha bs usko bolte callback function ha.
+
+//First Class Functions(Very Important):
+--Javascript me ek concept ha jiska matlab ha ki hum function ko use kr skte ha as a value.
+   var a = true, null, [], {}, undefined, and function(){}  //We can save all of these mentioned terms in a variable, functions can also be saved as a value in variable and this is done only in Javascript because all the functions in javascript are first class functions and can be used as a value.
+For example:   function abcd(a){
+                         a();  }
+               abcd(function(){ console.log( "Hello!"); })//  Here what we have done is that we create a function abcd() and then while calling this function we write a function and a print statement in it which is get stored as a value in 'a' and when we execute 'a' it provides us the desired output. So in this way we can use functions as a value in JS because functions are first class functions in JS.
+
+
+
+//Extra Learning stuff: 
+---I am given with a string: var a = "Javascript"; now if I want to know the length of this string I will use 'a.length', then if i want to know particular character I will use index number i.e 'a[0], a[4], a[7]' etc but if i want to know the value of negative index then I cannot use 'a[-1], a[-2]' because this will give me the output as undefined so to overcome this problem and to find the value of negative index we use .at() function in JS. We write 'a.at(-1), a.at(-4)' etc. So in this way we can find both positive and negative index values. 
+
+---If we are having a string let us say a = "Javascript"; and we need to print only some portion of it then we use a concept of substring, a.substring = substring(indexStart, indexEnd); a.substring = substring(1,4); So we will be having values of position 1,2,3 and 4 is not considered as it is the end point. ALways use substring method in javascript to get any portion of given string.
+
+
+//Everything about Strings in Javascript
+---You can create strings with " or '.
+---.length is a property that gives you the length of a string.
+---.toUpperCase() is a function that converts the string to upper case.
+---.toLowerCase() is a function that converts the string to lower case.
+---parentheses () on function calls are required. .length is a property that is already pre-computed; therefore, it does not need parentheses.
+---console.log(...) is used for debugging and is NOT a replacement for return.
+---Square brackets [index] are used to access a specific index from a string.
+---The index starts at 0. So the first character is index 0.
+---You can combine it with the length of a string to get another character in another position.
+---The .at() method allows you to read a character at an index (which can also be negative).
+---A substring is a part or a portion of a string.
+---string.substring(indexStart, indexEnd) is used to return a portion of the string.
+---indexStart: the position of the first character you'd like to include.
+---indexEnd: the position of the first character you'd like to ignore.
+---the indexEnd argument is optional which means you can leave it out.
+---The + operator is used to add 2 numbers
+---The + operator is used to concatenate 2 strings
+---A template string is a string created with the backtick character: `
+---Template strings can span multiple lines
+---Template strings support interpolation with the ${variableName} syntax  
+
+//Everyhting about Numbers and Math Operator in Javascript
+---Convert from a number to a string: value.toString()
+---NaN stands for Not a Number
+---NaN is often a sign of a bug.
+---Convert from string to number Number.parseInt(value, 10).
+---Number.parseInt(str, radix) is the name of the function you're calling.
+---10 is the radix which you should specify.
+---Make sure to always specify the radix to avoid unpleasant surprises.
+---The remainder operator (%) returns the division remainder between 2 numbers.  
+
+//Everything about Variables in Javascript
+---When you use a variable for the first time in JavaScript, you need to declare it with either let or const.
+---Use let for variables that you will need to re-assign later on (as in changing their value)
+---Use const for variables that you won't need to re-assign later on.
+---Variables declared with const are not constant. We will see why later in this course.
+---Variables declared with const cannot be re-assigned so you cannot have the = next to that variable name after declaring it.
+---If you see var, it's from the old version of JavaScript. You can convert it to let (sometimes const if the variable is not re-assigned).
+
+//Everything about Conditionals in Javascript
+---Using an if condition, you can run a piece of code when the condition evaluates to true
+---The syntax is if (condition) and then curly braces {} wrap the lines of code that correspond to this condition
+---The else keyword can be used to perform some other code based on all the other conditions not satisfied with the if.
+---When you have an if/else condition that returns two different results, it is possible to drop the else keyword.
+---Always use triple equals (===) when comparing 2 values in JavaScript.
+---When you're returning a boolean from a function, you can simplify your code by returning the boolean expression directly, without using an if statement.
+---The division remainder of a number divided by two is either 0 or 1. This helps us determine whether the number is even or odd.
+
+//Everything about Arrays in Javscript
+---const data = [1, 2, 3] is an array containing 3 numbers.
+---array.length returns the number of elements inside the array.
+---array.push(x) allows you to add the variable x to the end of the array. It also returns the new length of the array (after the push has been made).
+---Arrays defined with const are not constants because you can change the elements inside of it. However, you cannot re-assign them to another value thus they will always be an array.
+---.forEach(callback) iterates over every item in an array.
+---A callback is a function definition passed as a parameter to another function.
+---Always start with a console.log() inside the .forEach() to visualize the shift from array to array item (you can skip that when you become used to it).
+---The .forEach() method will take your function definition and call it for every item of the array. Every time the callback is called, the first parameter will represent the corresponding array item.
+---Naming variables with a clear name makes it much easier for you and others to understand the code. This is especially true with iteration.
+   Thus, it's always a good idea to use the plural for the 'array' and singular for the 'item' of the array.
+---Make sure to correctly place the 'return' inside a function that contains a .forEach(). Always use return after .forEach callback function and write it in the parent function code.
+---The .filter() method returns a new array that contains some of the items from the original array, based on the condition you specify.
+---JavaScript will take your callback function and call it for every single item in the array.
+---For the .filter() method, the result of the callback function matters. When it's true, the item will be included in the resulting array. Otherwise, it won't.
+---JavaScript cannot make a smart guess that the numbers array becomes the number parameter in your callback function. What it does is call your callback function while giving a value for the first parameter that you specified.
+---Use the plural -> singular naming convention when using the .filter() method.
+---The .find() method returns the first item which matches the condition that you specify. If no items were found, you would get back undefined.
+---The .filter() method always returns an array even if it's empty.
+---The array .map(callback) method allows you to transform an array into another one.
+---The array .includes(item) method takes an item and returns true when that item exists in the array and false otherwise.
+---The array .join(glue) method returns a string of the array elements separated by the glue.
+**Important note regarding arrays: If we are having an array with some values in it for ex: numbers, strings etc then to print each element of that array or to perform iterations over that array on each element then we use following syntax which consists of forEach loop:
+const grades = [10, 20, 35, 46];
+
+function eachGrade(grades){
+grades.forEach(function(grade){
+    console.log(grade);  });
+}
+
+
+**How to check number is positive or negative: 'if(number > 0)' It is a positive number else negative number
+**How to check number is even or odd: 'if(number % 2 === 0)' It is an even number else odd number 
+
+
+
+
+
+
+
+
+
+                                                                                               
